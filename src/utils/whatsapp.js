@@ -5,7 +5,7 @@ export const buildWhatsappLink = (phoneNumber, plantName, salePrice) => {
     maximumFractionDigits: 0,
   }).format(salePrice)
 
-  const message = `Hola! Me interesa la ${plantName} (${formattedPrice}), esta disponible?`
+  const message = 'Hola! Me interesa la ' + plantName + ' (' + formattedPrice + '), esta disponible?'
   const encoded = encodeURIComponent(message)
-  return `https://wa.me/549${phoneNumber}?text=${encoded}`
+  return 'https://wa.me/549' + phoneNumber + '?text=' + encoded
 }
