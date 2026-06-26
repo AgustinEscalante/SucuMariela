@@ -32,3 +32,12 @@ export const updateSupplier = async (id, supplierData) => {
   if (error) throw error
   return data
 }
+
+export const deleteSupplier = async (id) => {
+  const { error } = await supabase
+    .from('suppliers')
+    .delete()
+    .eq('id', id)
+
+  if (error) throw error
+}

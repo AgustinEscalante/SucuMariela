@@ -3,6 +3,7 @@ import {
   getSuppliers,
   createSupplier,
   updateSupplier,
+  deleteSupplier,
 } from '../services/suppliers.service'
 
 export const useSuppliers = () => {
@@ -28,6 +29,17 @@ export const useUpdateSupplier = () => {
 
   return useMutation({
     mutationFn: ({ id, ...data }) => updateSupplier(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['suppliers'] })
+    },
+  })
+}
+
+export const useDeleteSupplier = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id) => deleteSupplier(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['suppliers'] })
     },
