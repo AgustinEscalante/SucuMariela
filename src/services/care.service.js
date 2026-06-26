@@ -77,3 +77,15 @@ export const getPendingCareAlerts = async () => {
   if (error) throw error
   return data
 }
+
+export const updateCareProcess = async (id, processData) => {
+  const { data, error } = await supabase
+    .from('care_processes')
+    .update(processData)
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
