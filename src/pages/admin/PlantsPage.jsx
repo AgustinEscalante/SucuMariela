@@ -4,6 +4,7 @@ import PlantForm from '../../components/admin/PlantForm'
 import { usePlants, useCreatePlant, useUpdatePlant, useDeletePlant } from '../../hooks/usePlants'
 import { formatPrice } from '../../utils/formatters'
 import { PLANT_CATEGORIES } from '../../constants'
+import PlantPhotosManager from '../../components/admin/plants/PlantPhotosManager'
 
 export default function PlantsPage() {
   const [view, setView] = useState('list')
@@ -66,15 +67,21 @@ export default function PlantsPage() {
         )}
       </div>
 
-      {view === 'form' && (
-        <div className="card">
-          <PlantForm
-            onSubmit={handleSubmit}
-            defaultValues={editing ?? {}}
-            loading={createPlant.isPending || updatePlant.isPending}
-          />
-        </div>
-      )}
+ {view === 'form' && (
+  <div className="card">
+    <PlantForm
+      onSubmit={handleSubmit}
+      defaultValues={editing ?? {}}
+      loading={createPlant.isPending || updatePlant.isPending}
+    />
+    {editing && (
+      <div style={{ marginTop: 24, borderTop: '1px solid var(--gray-200)', paddingTop: 20 }}>
+        <h3 style={{ marginBottom: 14, fontSize: 15 }}>Fotos adicionales</h3>
+        <PlantPhotosManager plantId={editing.id} />
+      </div>
+    )}
+  </div>
+)}
 
       {view === 'list' && (
         <>

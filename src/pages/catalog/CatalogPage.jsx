@@ -4,7 +4,41 @@ import { useSettings } from '../../hooks/useSettings'
 import { formatPrice } from '../../utils/formatters'
 import { buildWhatsappLink } from '../../utils/whatsapp'
 import { PLANT_CATEGORIES } from '../../constants'
+import { usePlantPhotos } from '../../hooks/usePlantPhotos'
+import PhotoCarousel from '../../components/catalog/PhotoCarousel'
 
+// ─── Fuera del componente principal para evitar re-renders ───────────────────
+function PlantCardImage({ plant }) {
+  const { data: photos = [], isLoading } = usePlantPhotos(plant.id)
+
+  if (isLoading) {
+    return (
+      <div className="plant-card__img">
+        <div className="plant-card__img-placeholder" />
+      </div>
+    )
+  }
+
+  if (photos.length > 0) {
+    return (
+      <div className="plant-card__img">
+        <PhotoCarousel photos={photos} altText={plant.name} />
+      </div>
+    )
+  }
+
+  return (
+    <div className="plant-card__img">
+      {plant.photo_url ? (
+        <img src={plant.photo_url} alt={plant.name} />
+      ) : (
+        <div className="plant-card__img-placeholder">?</div>
+      )}
+    </div>
+  )
+}
+
+// ─── Componente principal ────────────────────────────────────────────────────
 export default function CatalogPage() {
   const [filterCategory, setFilterCategory] = useState('')
   const [search, setSearch] = useState('')
@@ -12,13 +46,15 @@ export default function CatalogPage() {
   const { data: plants = [], isLoading } = usePlants({ onlyActive: true })
   const { data: settings } = useSettings()
 
-  const storeName = settings?.store_name || 'SucuMariela'
+  const storeName = settings?.store_name || localStorage.getItem('store_name') || 'SucuMariela'
+  if (settings?.store_name) localStorage.setItem('store_name', settings.store_name)
+
   const whatsappNumber = settings?.whatsapp_number || ''
-  const contactLink = 'https://wa.me/549' + whatsappNumber
+  const contactLink    = 'https://wa.me/549' + whatsappNumber
 
   const filtered = plants.filter((p) => {
     const matchCategory = filterCategory ? p.category === filterCategory : true
-    const matchSearch = search
+    const matchSearch   = search
       ? p.name.toLowerCase().includes(search.toLowerCase()) ||
         (p.scientific_name?.toLowerCase().includes(search.toLowerCase()))
       : true
@@ -86,13 +122,7 @@ export default function CatalogPage() {
           <div className="catalog-grid">
             {filtered.map((plant) => (
               <div key={plant.id} className="plant-card">
-                <div className="plant-card__img">
-                  {plant.photo_url ? (
-                    <img src={plant.photo_url} alt={plant.name} />
-                  ) : (
-                    <div className="plant-card__img-placeholder">?</div>
-                  )}
-                </div>
+                <PlantCardImage plant={plant} />
                 <div className="plant-card__body">
                   <div className="plant-card__name">{plant.name}</div>
                   {plant.scientific_name && (

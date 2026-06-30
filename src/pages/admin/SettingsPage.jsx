@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import AdminLayout from '../../components/admin/AdminLayout'
 import { useSettings, useUpdateSetting } from '../../hooks/useSettings'
 import { useForm } from 'react-hook-form'
+import PushSettings from '../../components/admin/PushSettings'
 
 export default function SettingsPage() {
   const { data: settings, isLoading } = useSettings()
@@ -96,6 +97,11 @@ export default function SettingsPage() {
 
         </form>
       </div>
+
+              <div className="card" style={{ marginTop: 24 }}>
+          <h3 style={{ marginBottom: 16 }}>Notificaciones push</h3>
+          <PushSettings />
+        </div>
     </AdminLayout>
   )
 }

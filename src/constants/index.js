@@ -10,6 +10,7 @@ export const ORDER_STATUSES = [
   { value: 'listo', label: 'Listo para retirar' },
   { value: 'entregado', label: 'Entregado' },
   { value: 'cancelado', label: 'Cancelado' },
+  { value: 'entregado', label: 'Entregado' }
 ]
 
 export const CONFIRMED_VIA = {

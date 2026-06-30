@@ -1,7 +1,7 @@
 import { supabase } from '../lib/supabase'
 import { compressImage } from '../utils/imageCompression'
 
-export const getPlants = async ({ onlyActive = false } = {}) => {
+export const getPlants = async ({ onlyActive = true } = {}) => {
   let query = supabase
     .from('plants')
     .select(`*, suppliers(id, name)`)

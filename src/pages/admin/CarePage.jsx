@@ -3,10 +3,13 @@ import AdminLayout from '../../components/admin/AdminLayout'
 import { useCareProcesses, useCreateCareProcess, useUpdateCareProcess } from '../../hooks/useCare'
 import { usePlants } from '../../hooks/usePlants'
 import { useForm } from 'react-hook-form'
+import Modal from '../../components/admin/Modal'
+import PlantCareTab from '../../components/admin/care/PlantCareTab'
 
 export default function CarePage() {
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState(null)
+  const [careTarget, setCareTarget] = useState(null)
 
   const { data: processes = [], isLoading } = useCareProcesses()
   const { data: plants = [] } = usePlants({ onlyActive: true })
@@ -201,10 +204,14 @@ export default function CarePage() {
                       </div>
                     </div>
                   </td>
-                  <td className="text-muted">Por configurar</td>
+                 <td className="text-muted"></td>
                   <td>
-                    <button className="btn-secondary" style={{ fontSize: 12 }}>
-                      Asignar cuidados
+                    <button
+                      className="btn-secondary"
+                      style={{ fontSize: 12 }}
+                      onClick={() => setCareTarget({ id: plant.id, name: plant.name })}
+                    >
+                      Ver cuidados
                     </button>
                   </td>
                 </tr>
@@ -213,6 +220,14 @@ export default function CarePage() {
           </table>
         </div>
       )}
+                {careTarget && (
+            <Modal
+              title={'Cuidados — ' + careTarget.name}
+              onClose={() => setCareTarget(null)}
+            >
+              <PlantCareTab plantId={careTarget.id} plantName={careTarget.name} />
+            </Modal>
+          )}
     </AdminLayout>
   )
 }

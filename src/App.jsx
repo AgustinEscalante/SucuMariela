@@ -9,6 +9,7 @@ import OrdersPage from './pages/admin/OrdersPage'
 import SuppliersPage from './pages/admin/SuppliersPage'
 import SettingsPage from './pages/admin/SettingsPage'
 import CatalogPage from './pages/catalog/CatalogPage'
+import StatsPage from './pages/admin/StatsPage'
 
 const ProtectedRoute = ({ children }) => {
   const user = useAuthStore((s) => s.user)
@@ -78,6 +79,8 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+      import StatsPage from './pages/admin/StatsPage'
+      <Route path="/admin/estadisticas" element={<StatsPage />} />
       <Route path="*" element={<Navigate to="/catalogo" replace />} />
     </Routes>
   )
