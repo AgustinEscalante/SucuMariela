@@ -13,6 +13,7 @@
      fijo y propio. Sin esto, el "Tema oscuro" de Android/Chrome
      fuerza una inversion de colores sobre el sitio. */
   color-scheme: light only;
+  
 
   --green-50: #fef0d8;;
   --green-100: #e8f0e0;
@@ -1518,3 +1519,28 @@ tbody tr:hover td {
   padding: 20px 40px;
 }
 
+.stats-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 10px 12px;
+  }
+
+  .stat-card__value {
+    font-size: 18px;
+  }
+
+  .stats-charts-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

@@ -1,4 +1,4 @@
-// src/pages/admin/StatsPage.jsx
+// src/pages/admin/StatsPage.jsx — version corregida
 import { useState } from 'react'
 import AdminLayout from '../../components/admin/AdminLayout'
 import {
@@ -20,7 +20,6 @@ const EXPENSE_CATEGORIES = [
   { value: 'otro',         label: 'Otro' },
 ]
 
-// ─── GRAFICO DE BARRAS SIMPLE ─────────────────────────────────────────────────
 function BarChart({ data, color = 'var(--green-500)', label = '' }) {
   const max = Math.max(...data.map((d) => d.value), 1)
 
@@ -49,7 +48,6 @@ function BarChart({ data, color = 'var(--green-500)', label = '' }) {
   )
 }
 
-// ─── FORMULARIO DE GASTO ─────────────────────────────────────────────────────
 function ExpenseForm({ onSave, onCancel }) {
   const [form, setForm] = useState({
     description: '',
@@ -106,7 +104,6 @@ function ExpenseForm({ onSave, onCancel }) {
   )
 }
 
-// ─── PAGINA PRINCIPAL ─────────────────────────────────────────────────────────
 export default function StatsPage() {
   const [showExpenseForm, setShowExpenseForm] = useState(false)
 
@@ -123,7 +120,6 @@ export default function StatsPage() {
   const totalExpenses = expenses.reduce((a, e) => a + Number(e.amount), 0)
   const netProfit     = totalRevenue - totalExpenses
 
-  // Mes actual
   const now       = new Date()
   const thisMonth = (item) => {
     const d = new Date(item.delivered_at || item.date)
@@ -138,7 +134,6 @@ export default function StatsPage() {
         <h2>Estadisticas</h2>
       </div>
 
-      {/* ── Stats cards ── */}
       <div className="stats-grid" style={{ marginBottom: 24 }}>
         <div className="stat-card">
           <div className="stat-card__value" style={{ color: 'var(--green-600)' }}>{formatPrice(monthRevenue)}</div>
@@ -160,8 +155,8 @@ export default function StatsPage() {
         </div>
       </div>
 
-      {/* ── Graficos ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+      {/* Graficos — clase en vez de inline style para poder sobreescribir en mobile */}
+      <div className="stats-charts-grid" style={{ marginBottom: 24 }}>
         <div className="card">
           <BarChart data={revenueByMonth}  color="var(--green-500)" label="Ingresos por mes" />
         </div>
@@ -170,7 +165,6 @@ export default function StatsPage() {
         </div>
       </div>
 
-      {/* ── Ventas por planta ── */}
       <div className="card" style={{ marginBottom: 24 }}>
         <h3 style={{ marginBottom: 14 }}>Ventas por planta</h3>
         {sales.length === 0 ? (
@@ -218,7 +212,6 @@ export default function StatsPage() {
         )}
       </div>
 
-      {/* ── Gastos ── */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
         <h3>Gastos</h3>
         <button className="btn-primary" onClick={() => setShowExpenseForm((v) => !v)}>
