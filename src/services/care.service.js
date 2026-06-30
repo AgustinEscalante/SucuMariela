@@ -106,9 +106,10 @@ export const removeSchedule = async (id) => {
 export const getPendingCareAlerts = async () => {
   const { data, error } = await supabase
     .from('plant_care_schedules')
-    .select('*, plants(id, name, photo_url), care_processes(id, name, icon)')
+    .select('*, plants!inner(id, name, photo_url, active), care_processes(id, name, icon)')
     .lte('next_due_at', new Date().toISOString())
     .eq('notify_enabled', true)
+    .eq('plants.active', true)
     .order('next_due_at')
 
   if (error) throw error

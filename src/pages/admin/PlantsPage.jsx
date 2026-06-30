@@ -30,12 +30,14 @@ export default function PlantsPage() {
 
     if (editing) {
       await updatePlant.mutateAsync({ id: editing.id, plantData, photoFile })
+      setView('list')
+      setEditing(null)
     } else {
-      await createPlant.mutateAsync({ plantData, photoFile })
+      const created = await createPlant.mutateAsync({ plantData, photoFile })
+      // Pasamos a modo edicion de la planta recien creada
+      // para habilitar la carga de fotos adicionales sin perder el flujo
+      setEditing(created)
     }
-
-    setView('list')
-    setEditing(null)
   }
 
   const handleEdit = (plant) => {
@@ -77,6 +79,9 @@ export default function PlantsPage() {
     {editing && (
       <div style={{ marginTop: 24, borderTop: '1px solid var(--gray-200)', paddingTop: 20 }}>
         <h3 style={{ marginBottom: 14, fontSize: 15 }}>Fotos adicionales</h3>
+        <p className="text-muted" style={{ fontSize: 13, marginBottom: 12 }}>
+          La planta ya esta guardada. Agregale mas fotos para el carrusel del catalogo.
+        </p>
         <PlantPhotosManager plantId={editing.id} />
       </div>
     )}
@@ -90,8 +95,9 @@ export default function PlantsPage() {
           ) : plants.length === 0 ? (
             <p className="text-muted">No hay plantas cargadas todavia.</p>
           ) : (
-            <div className="table-wrapper">
-              <table>
+            <div className="table-wrapper plants-table-wrapper">
+              {/* Tabla completa: visible en desktop, oculta en mobile via CSS */}
+              <table className="plants-table-desktop">
                 <thead>
                   <tr>
                     <th>Foto</th>
@@ -154,6 +160,69 @@ export default function PlantsPage() {
                   ))}
                 </tbody>
               </table>
+
+              {/* Lista compacta: visible solo en mobile via CSS */}
+              <div className="plants-list-mobile">
+                <div className="plant-row-mobile plant-row-mobile--header">
+                  <span className="plant-row-mobile__head-photo">Foto</span>
+                  <span className="plant-row-mobile__head-name">Nombre</span>
+                  <span className="plant-row-mobile__head-stock">Stock</span>
+                  <span className="plant-row-mobile__head-actions">Acciones</span>
+                </div>
+                {plants.map((plant) => (
+                  <div className="plant-row-mobile" key={plant.id}>
+                    {plant.photo_url ? (
+                      <img
+                        src={plant.photo_url}
+                        alt={plant.name}
+                        className="plant-row-mobile__photo"
+                      />
+                    ) : (
+                      <div className="plant-row-mobile__photo plant-row-mobile__photo--empty">
+                        ?
+                      </div>
+                    )}
+
+                    <div className="plant-row-mobile__info">
+                      <div className="plant-row-mobile__name">{plant.name}</div>
+                      {plant.scientific_name && (
+                        <div className="plant-row-mobile__scientific">{plant.scientific_name}</div>
+                      )}
+                    </div>
+
+                    <span className={`pill ${plant.stock === 0 ? 'pill--danger' : plant.stock <= 2 ? 'pill--warn' : 'pill--ok'} plant-row-mobile__stock`}>
+                      {plant.stock}
+                    </span>
+
+                    <div className="plant-row-mobile__actions">
+                      <button
+                        className="btn-icon-round"
+                        aria-label="Editar"
+                        title="Editar"
+                        onClick={() => handleEdit(plant)}
+                      >
+                        ✎
+                      </button>
+                      <button
+                        className="btn-icon-round"
+                        aria-label="Ver detalle"
+                        title="Ver detalle"
+                        onClick={() => handleEdit(plant)}
+                      >
+                        👁
+                      </button>
+                      <button
+                        className="btn-icon-round btn-icon-round--danger"
+                        aria-label="Eliminar"
+                        title="Eliminar"
+                        onClick={() => handleDelete(plant.id)}
+                      >
+                        🗑
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </>

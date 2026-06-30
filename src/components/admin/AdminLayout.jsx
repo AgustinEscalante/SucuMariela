@@ -5,12 +5,12 @@ import { useUnreadCount } from '../../hooks/useNotifications'
 import NotificationsPanel from './NotificationsPanel'
 
 const NAV_ITEMS = [
-  { to: '/admin',             label: 'Inicio',       end: true },
-  { to: '/admin/plantas',     label: 'Plantas' },
-  { to: '/admin/cuidados',    label: 'Cuidados' },
-  { to: '/admin/pedidos',     label: 'Pedidos' },
-  { to: '/admin/proveedores', label: 'Proveedores' },
-  { to: '/admin/ajustes',     label: 'Ajustes' },
+  { to: '/admin',              label: 'Inicio',       end: true },
+  { to: '/admin/plantas',      label: 'Plantas' },
+  { to: '/admin/cuidados',     label: 'Cuidados' },
+  { to: '/admin/pedidos',      label: 'Pedidos' },
+  { to: '/admin/proveedores',  label: 'Proveedores' },
+  { to: '/admin/ajustes',      label: 'Ajustes' },
   { to: '/admin/estadisticas', label: 'Estadisticas' },
 ]
 
@@ -74,7 +74,7 @@ export default function AdminLayout({ children }) {
 
       <div className="admin-main-wrapper">
 
-        {/* Top bar */}
+        {/* Top bar mobile */}
         <div className="mobile-topbar">
           <button
             className="hamburger"
@@ -85,9 +85,8 @@ export default function AdminLayout({ children }) {
           </button>
           <span className="mobile-topbar__title">SucuMariela</span>
 
-          {/* Campana de notificaciones en mobile */}
           <button
-            className="notif-bell"
+            className="notif-bell notif-bell--mobile-trigger"
             onClick={() => setNotifOpen((v) => !v)}
             aria-label="Notificaciones"
           >
@@ -100,7 +99,7 @@ export default function AdminLayout({ children }) {
 
         <main className="admin-main">
 
-          {/* Campana en desktop — arriba a la derecha del contenido */}
+          {/* Campana desktop */}
           <div className="notif-bell-desktop-wrapper">
             <button
               className="notif-bell notif-bell--desktop"
@@ -112,15 +111,22 @@ export default function AdminLayout({ children }) {
                 <span className="notif-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
               )}
             </button>
-
-            {notifOpen && (
-              <NotificationsPanel onClose={() => setNotifOpen(false)} />
-            )}
           </div>
 
           {children}
         </main>
       </div>
+
+      {/* ── UNICO panel de notificaciones, renderizado una sola vez ── */}
+      {notifOpen && (
+        <>
+          {/* Overlay solo visible en mobile via CSS, clickeable para cerrar */}
+          <div className="notif-overlay" onClick={() => setNotifOpen(false)} />
+          <div className="notif-panel">
+            <NotificationsPanel onClose={() => setNotifOpen(false)} />
+          </div>
+        </>
+      )}
 
     </div>
   )
