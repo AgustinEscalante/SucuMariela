@@ -14,6 +14,9 @@ function timeAgo(dateStr) {
   return `hace ${Math.floor(diff / 86400)}d`
 }
 
+
+
+
 export default function NotificationsPanel({ onClose }) {
   const { data: notifications = [], isLoading } = useNotifications()
   const markAsRead    = useMarkAsRead()
