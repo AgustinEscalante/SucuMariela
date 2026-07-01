@@ -34,9 +34,8 @@ export default function PlantsPage() {
       setEditing(null)
     } else {
       const created = await createPlant.mutateAsync({ plantData, photoFile })
-      // Pasamos a modo edicion de la planta recien creada
-      // para habilitar la carga de fotos adicionales sin perder el flujo
-      setEditing(created)
+  setEditing(created)
+  setView('form')
     }
   }
 

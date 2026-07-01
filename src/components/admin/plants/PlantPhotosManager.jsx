@@ -10,6 +10,7 @@ export default function PlantPhotosManager({ plantId }) {
   const fileInputRef = useRef(null)
   const [uploading, setUploading] = useState(false)
   const [error, setError]         = useState(null)
+  
 
   const { data: photos = [], isLoading } = usePlantPhotos(plantId)
   const uploadPhoto  = useUploadPlantPhoto()
